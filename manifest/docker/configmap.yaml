@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: n9e-conf
+  namespace: n9e
+data:
+  config.release.yaml: |
+    captcha:
+        key-long: 6
+        img-width: 240
+        img-height: 80
+        open-captcha: 0
+        open-captcha-timeout: 3600
+    cors:
+        mode: strict-whitelist
+        whitelist:
+            - allow-origin: example1.com
+              allow-methods: POST, GET
+              allow-headers: Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id
+              expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
+              allow-credentials: true
+            - allow-origin: example2.com
+              allow-methods: GET, POST
+              allow-headers: content-type
+              expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
+              allow-credentials: true
+    db-list:
+        - type: "mysql"
+          alias-name: "n9e"
+          prefix: ""
+          port: "3306"
+          config: charset=utf8mb4&parseTime=True&loc=Local
+          db-name: "n9e_v5"
+          username: "root"
+          password: "xxx"
+          path: "192.168.1.100"
+          engine: ""
+          log-mode: ""
+          max-idle-conns: 10
+          max-open-conns: 100
+          singular: false
+          log-zap: true
+          disable: false
+    email:
+        to: xxx@qq.com
+        from: xxx@163.com
+        host: smtp.163.com
+        secret: xxx
+        nickname: test
+        port: 465
+        is-ssl: true
+    excel:
+        dir: ./resource/excel/
+    jwt:
+        signing-key: 82o84u32-b9f1-48dd-bfd4-54013edb31a5
+        expires-time: 7d
+        buffer-time: 1d
+        issuer: agentconf-api
+    ldap:
+        enable: true
+        ldap-server: 192.168.1.101
+        ldap-port: 389
+        is-ssl: false
+        start-tls: false
+        ldap-dn: cn=root,dc=st,dc=com
+        ldap-password: adminxxx
+        ldap-ou: dc=st,dc=com
+        ldap-filter: (&(uid=%s))
+        field-mapping: |-
+            {
+              "userName": "uid",
+              "nickName": "cn",
+              "email": "mail",
+              "phone": "mobile"
+            }
+        timeout: 30
+        pagelimit: 1000
+    local:
+        path: uploads/file
+        store-path: uploads/file
+    mysql:
+        prefix: ""
+        port: "33067"
+        config: charset=utf8mb4&parseTime=True&loc=Local
+        db-name: n9e_conf
+        username: n9e_conf
+        password: xxx
+        path: 192.168.1.100
+        engine: ""
+        log-mode: error
+        max-idle-conns: 10
+        max-open-conns: 100
+        singular: false
+        log-zap: true
+    redis:
+        addr: "1.1.1.1:6380"
+        password: "123456"
+        db: 10
+        useCluster: false
+        clusterAddrs:
+            - 172.21.0.3:7000
+            - 172.21.0.4:7001
+            - 172.21.0.2:7002
+    system:
+        db-type: mysql
+        oss-type: local
+        router-prefix: ""
+        addr: 8888
+        iplimit-count: 15000
+        iplimit-time: 3600
+        use-multipoint: false
+        use-redis: true
+        use-mongo: false
+    zap:
+        level: info
+        prefix: '[agentconf-api]'
+        format: console
+        director: log
+        encode-level: LowercaseColorLevelEncoder
+        stacktrace-key: stacktrace
+        max-age: 0
+        show-line: false
+        log-in-console: true
+    basicauth:
+        user: "xxx"
+        password: "xxx"
+    prom:
+        host: "http://1.1.1.1:8481/select/0/prometheus"
+        user: xx
+        auth: xx
+    target:
+        TargetUp: max(max_over_time(target_up{ident=~'(%s)'}[%dm])) by (ident)
+        LoadPerCore: max(max_over_time(system_load_norm_1{ident=~'(%s)'}[%dm])) by (ident)
+        MemUtil: 100-max(max_over_time(mem_available_percent{ident=~'(%s)'}[%dm])) by (ident)
+        DiskUtil: max(max_over_time(disk_used_percent{ident=~"(%s)", path="/"}[%dm])) by (ident)
+    n9e_adm:
+      - 用户1
+      - 用户2
